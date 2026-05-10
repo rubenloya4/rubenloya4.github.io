@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ruben Loya — Automation & Sales Engineering</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&family=Instrument+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+```
+:root {
+  --black:   #0a0a0a;
+  --off:     #111111;
+  --border:  #222222;
+  --muted:   #555555;
+  --mid:     #888888;
+  --light:   #cccccc;
+  --white:   #f5f4f0;
+  --accent:  #c8a96e;
+  --serif:   'Cormorant Garamond', Georgia, serif;
+  --mono:    'DM Mono', monospace;
+  --sans:    'Instrument Sans', sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--sans);
+  font-weight: 300;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 4rem;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.4s, background 0.4s;
+}
+nav.scrolled {
+  border-color: var(--border);
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(12px);
+}
+.nav-logo {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: var(--mid);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.nav-links {
+  display: flex;
+  gap: 2.5rem;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-cta {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--white);
+  text-decoration: none;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  padding: 0.5rem 1.2rem;
+  transition: border-color 0.3s, color 0.3s;
+}
+.nav-cta:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ── HERO ── */
+#hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: 0 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 8rem;
+  max-width: 900px;
+}
+.hero-tag {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.2s forwards;
+}
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(3.5rem, 7vw, 6.5rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.9s ease 0.4s forwards;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hero-sub {
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--mid);
+  max-width: 480px;
+  line-height: 1.7;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.6s forwards;
+}
+.hero-actions {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.8s forwards;
+}
+.btn-primary {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--white);
+  text-decoration: none;
+  padding: 0.8rem 2rem;
+  transition: background 0.3s, color 0.3s;
+}
+.btn-primary:hover { background: var(--accent); }
+.btn-ghost {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.btn-ghost:hover { color: var(--white); }
+.btn-ghost::after { content: ' →'; }
+
+.hero-meta {
+  display: flex;
+  gap: 4rem;
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border);
+  opacity: 0;
+  animation: fadeUp 1s ease 1s forwards;
+}
+.meta-item label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+.meta-item span {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--light);
+}
+
+/* ── DECORATIVE LINE ── */
+.deco-line {
+  position: absolute;
+  right: 4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1px;
+  height: 40vh;
+  background: linear-gradient(to bottom, transparent, var(--border), transparent);
+}
+
+/* ── SECTIONS ── */
+section { padding: 7rem 4rem; }
+.section-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  max-width: 60px;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ── ABOUT ── */
+#about { border-top: 1px solid var(--border); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+.about-title {
+  font-family: var(--serif);
+  font-size: clamp(2.2rem, 4vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.about-title em { font-style: italic; color: var(--accent); }
+.about-body {
+  font-size: 0.95rem;
+  color: var(--mid);
+  line-height: 1.85;
+}
+.about-body p + p { margin-top: 1.2rem; }
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 3rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--border);
+}
+.stat-num {
+  font-family: var(--serif);
+  font-size: 2.8rem;
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1;
+}
+.stat-label {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-top: 0.4rem;
+}
+
+/* ── EXPERTISE ── */
+#expertise { border-top: 1px solid var(--border); background: var(--off); }
+.expertise-intro {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 300;
+  line-height: 1.2;
+  max-width: 700px;
+  margin-bottom: 5rem;
+}
+.expertise-intro em { font-style: italic; color: var(--accent); }
+.expertise-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid var(--border);
+}
+.expertise-card {
+  padding: 3rem 2.5rem;
+  border-right: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.expertise-card:last-child { border-right: none; }
+.expertise-card:hover { background: rgba(200,169,110,0.04); }
+.card-num {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+.card-title {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+  color: var(--white);
+}
+.card-body {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.8rem;
+}
+.tag {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.7rem;
+}
+
+/* ── PROJECTS ── */
+#projects { border-top: 1px solid var(--border); }
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 4rem;
+}
+.projects-title {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 300;
+  line-height: 1.2;
+}
+.projects-title em { font-style: italic; color: var(--accent); }
+.project-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  padding: 2.2rem 0;
+  border-top: 1px solid var(--border);
+  transition: background 0.3s;
+  cursor: default;
+}
+.project-row:last-child { border-bottom: 1px solid var(--border); }
+.project-row:hover { background: rgba(255,255,255,0.02); }
+.project-index {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.project-name {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--white);
+}
+.project-desc {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+.project-tech {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ── PROCESS ── */
+#process { border-top: 1px solid var(--border); background: var(--off); }
+.process-intro {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 300;
+  line-height: 1.2;
+  max-width: 600px;
+  margin-bottom: 5rem;
+}
+.process-intro em { font-style: italic; color: var(--accent); }
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+}
+.step-num {
+  font-family: var(--serif);
+  font-size: 4rem;
+  font-weight: 300;
+  color: var(--border);
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+.step-title {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 0.8rem;
+  letter-spacing: 0.02em;
+}
+.step-body {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* ── CONTACT ── */
+#contact { border-top: 1px solid var(--border); }
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+.contact-title {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.contact-title em { font-style: italic; color: var(--accent); }
+.contact-sub {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 1.5rem;
+  line-height: 1.7;
+  max-width: 380px;
+}
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+.contact-item:last-child { border-bottom: none; padding-bottom: 0; }
+.contact-label {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.contact-value {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  color: var(--white);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.contact-value:hover { color: var(--accent); }
+
+/* ── FOOTER ── */
+footer {
+  padding: 2rem 4rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer p {
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  nav { padding: 1.2rem 1.5rem; }
+  .nav-links { display: none; }
+  section { padding: 4rem 1.5rem; }
+  #hero { padding: 0 1.5rem; }
+  .about-grid,
+  .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .expertise-grid { grid-template-columns: 1fr; }
+  .expertise-card { border-right: none; border-bottom: 1px solid var(--border); }
+  .process-steps { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .project-row { grid-template-columns: 50px 1fr; }
+  .project-desc,
+  .project-tech { display: none; }
+  .deco-line { display: none; }
+  footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+```
+
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+
+  <nav id="nav">
+    <a href="#hero" class="nav-logo">RL · Portfolio</a>
+    <ul class="nav-links">
+      <li><a href="#about">Acerca</a></li>
+      <li><a href="#expertise">Expertise</a></li>
+      <li><a href="#projects">Proyectos</a></li>
+      <li><a href="#process">Proceso</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Iniciar conversación</a>
+  </nav>
+
+  <!-- HERO -->
+
+  <section id="hero">
+    <div class="hero-content">
+      <p class="hero-tag">Monterrey, México · Disponible para proyectos</p>
+      <h1 class="hero-title">
+        Ingeniería de ventas<br />
+        para decisiones <em>consecuentes.</em>
+      </h1>
+      <p class="hero-sub">
+        Automation Control Systems Engineer especializado en automatización industrial y análisis de datos. Convierto datos complejos en decisiones claras y soluciones técnicas en resultados de negocio.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Iniciar conversación</a>
+        <a href="#projects" class="btn-ghost">Ver proyectos</a>
+      </div>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <label>Empresa</label>
+        <span>Keyence de México</span>
+      </div>
+      <div class="meta-item">
+        <label>Rol</label>
+        <span>Sales Engineer · APSM</span>
+      </div>
+      <div class="meta-item">
+        <label>Especialidad</label>
+        <span>Automatización · PLC · Datos</span>
+      </div>
+      <div class="meta-item">
+        <label>Región</label>
+        <span>Monterrey · MTY</span>
+      </div>
+    </div>
+    <div class="deco-line"></div>
+  </section>
+
+  <!-- ABOUT -->
+
+  <section id="about">
+    <p class="section-label">Acerca de mí</p>
+    <div class="about-grid">
+      <div>
+        <h2 class="about-title reveal">
+          Donde la ingeniería<br />
+          encuentra la <em>estrategia.</em>
+        </h2>
+        <div class="about-stats reveal">
+          <div>
+            <div class="stat-num">5+</div>
+            <div class="stat-label">Años en ventas industriales</div>
+          </div>
+          <div>
+            <div class="stat-num">MTY</div>
+            <div class="stat-label">Oficina principal</div>
+          </div>
+          <div>
+            <div class="stat-num">PLC</div>
+            <div class="stat-label">Especialidad técnica</div>
+          </div>
+          <div>
+            <div class="stat-num">100+</div>
+            <div class="stat-label">Clientes atendidos</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-body reveal">
+        <p>
+          Soy Ruben Loya Perez, Sales Engineer en Keyence de México con base en Monterrey. Me especializo en soluciones de automatización industrial — desde PLCs hasta visión artificial y sensórica avanzada — combinando conocimiento técnico profundo con capacidad de ventas consultiva.
+        </p>
+        <p>
+          Más allá de las ventas, desarrollo herramientas de análisis de datos que permiten a los equipos comerciales tomar decisiones informadas: dashboards de rendimiento, calculadoras de ROI para clientes y automatizaciones que eliminan el trabajo manual.
+        </p>
+        <p>
+          Mi enfoque es simple: entender el problema de fondo del cliente, proponer la solución técnica correcta, y demostrar el retorno de inversión de forma clara y cuantificable.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERTISE -->
+
+  <section id="expertise">
+    <p class="section-label">Expertise</p>
+    <p class="expertise-intro reveal">
+      Tres áreas de especialización.<br />
+      <em>Un enfoque integrado.</em>
+    </p>
+    <div class="expertise-grid reveal">
+      <div class="expertise-card">
+        <p class="card-num">I</p>
+        <h3 class="card-title">Automatización Industrial</h3>
+        <p class="card-body">
+          Diseño y venta de soluciones de control y automatización para manufactura. Desde la especificación técnica hasta la demostración en planta, acompañando al cliente en cada etapa del proceso de decisión.
+        </p>
+        <div class="card-tags">
+          <span class="tag">PLC</span>
+          <span class="tag">HMI</span>
+          <span class="tag">Keyence KV</span>
+          <span class="tag">Allen Bradley</span>
+          <span class="tag">Visión Artificial</span>
+        </div>
+      </div>
+      <div class="expertise-card">
+        <p class="card-num">II</p>
+        <h3 class="card-title">Análisis de Datos</h3>
+        <p class="card-body">
+          Desarrollo de herramientas de inteligencia comercial: dashboards de rendimiento de equipo, reportes de KPIs de ventas y métricas de negocio que convierten datos crudos en decisiones accionables.
+        </p>
+        <div class="card-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Streamlit</span>
+          <span class="tag">Pandas</span>
+          <span class="tag">Plotly</span>
+          <span class="tag">Excel</span>
+        </div>
+      </div>
+      <div class="expertise-card">
+        <p class="card-num">III</p>
+        <h3 class="card-title">Consultoría ROI</h3>
+        <p class="card-body">
+          Construcción de casos de negocio para justificar inversiones en automatización. Metodología propia que cuantifica el retorno considerando paros, reclamos, mano de obra y eficiencia operativa.
+        </p>
+        <div class="card-tags">
+          <span class="tag">ROI Analysis</span>
+          <span class="tag">Cost Modeling</span>
+          <span class="tag">PDF Reports</span>
+          <span class="tag">Sales Strategy</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+
+  <section id="projects">
+    <p class="section-label">Proyectos</p>
+    <div class="projects-header">
+      <h2 class="projects-title reveal">
+        Herramientas construidas<br />
+        para <em>resultados reales.</em>
+      </h2>
+    </div>
+
+```
+<div class="project-row reveal">
+  <span class="project-index">01</span>
+  <span class="project-name">Sales Ranking Dashboard</span>
+  <span class="project-desc">Dashboard de rendimiento para equipo de ventas nacional. Ranking ponderado con desviación estándar, KPIs por oficina y análisis por trimestre.</span>
+  <span class="project-tech">Python · Streamlit · Plotly</span>
+</div>
+<div class="project-row reveal">
+  <span class="project-index">02</span>
+  <span class="project-name">Calculadora ROI — PLCs</span>
+  <span class="project-desc">Herramienta de cotización que genera reportes PDF de retorno de inversión para clientes industriales. Considera paros, reclamos, mano de obra y eficiencia.</span>
+  <span class="project-tech">Python · FPDF · Streamlit</span>
+</div>
+<div class="project-row reveal">
+  <span class="project-index">03</span>
+  <span class="project-name">Agente de Seguimiento</span>
+  <span class="project-desc">Sistema automatizado de seguimiento de actividad comercial vía WhatsApp. Recolección de métricas diarias y generación de resúmenes automáticos.</span>
+  <span class="project-tech">Python · Twilio · Automation</span>
+</div>
+<div class="project-row reveal">
+  <span class="project-index">04</span>
+  <span class="project-name">Portfolio Web</span>
+  <span class="project-desc">Sitio web personal de presentación profesional. Diseño minimalista enfocado en claridad y credibilidad técnica.</span>
+  <span class="project-tech">HTML · CSS · GitHub Pages</span>
+</div>
+```
+
+  </section>
+
+  <!-- PROCESS -->
+
+  <section id="process">
+    <p class="section-label">Proceso</p>
+    <p class="process-intro reveal">
+      Cómo trabajo con<br />
+      <em>cada cliente.</em>
+    </p>
+    <div class="process-steps">
+      <div class="reveal">
+        <div class="step-num">01</div>
+        <div class="step-title">Diagnóstico</div>
+        <p class="step-body">Entender el proceso productivo del cliente, identificar los puntos de dolor reales y cuantificar el costo actual del problema.</p>
+      </div>
+      <div class="reveal">
+        <div class="step-num">02</div>
+        <div class="step-title">Solución Técnica</div>
+        <p class="step-body">Especificación de la solución de automatización adecuada, demostración en planta y validación con el equipo técnico del cliente.</p>
+      </div>
+      <div class="reveal">
+        <div class="step-num">03</div>
+        <div class="step-title">Caso de Negocio</div>
+        <p class="step-body">Construcción del reporte ROI con payback, ahorro proyectado y comparativo de costos. Entregable PDF listo para presentar a dirección.</p>
+      </div>
+      <div class="reveal">
+        <div class="step-num">04</div>
+        <div class="step-title">Seguimiento</div>
+        <p class="step-body">Acompañamiento post-venta, verificación de resultados y generación de oportunidades de expansión dentro del mismo cliente.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+
+  <section id="contact">
+    <p class="section-label">Contacto</p>
+    <div class="contact-grid">
+      <div class="reveal">
+        <h2 class="contact-title">
+          Iniciemos una<br />
+          <em>conversación.</em>
+        </h2>
+        <p class="contact-sub">
+          Si estás evaluando una solución de automatización o quieres discutir cómo los datos pueden mejorar la operación de tu equipo comercial, estoy disponible para una llamada.
+        </p>
+      </div>
+      <div class="contact-links reveal">
+        <div class="contact-item">
+          <span class="contact-label">Email</span>
+          <a href="mailto:rloya@keyence.com" class="contact-value">rloya@keyence.com</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Teléfono</span>
+          <a href="tel:+528118249158" class="contact-value">+52 81 1824 9158</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">LinkedIn</span>
+          <a href="https://linkedin.com/in/rubenloya" target="_blank" class="contact-value">linkedin.com/in/rubenloya</a>
+        </div>
+        <div class="contact-item">
+          <span class="contact-label">Ubicación</span>
+          <span class="contact-value">Monterrey, Nuevo León · México</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer>
+    <p>© 2026 Ruben Loya Perez</p>
+    <p>Automation Control Systems Engineer · Keyence de México</p>
+    <p>Monterrey, NL · México</p>
+  </footer>
+
+  <script>
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Reveal on scroll
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, i * 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
