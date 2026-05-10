@@ -54,11 +54,7 @@ nav {
   border-bottom: 1px solid transparent;
   transition: border-color 0.4s, background 0.4s;
 }
-nav.scrolled {
-  border-color: var(--border);
-  background: rgba(10,10,10,0.92);
-  backdrop-filter: blur(12px);
-}
+
 .nav-logo {
   font-family: var(--mono);
   font-size: 0.75rem;
@@ -801,11 +797,7 @@ footer p {
   </footer>
 
   <script>
-    // Nav scroll effect
-    const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 40);
-    });
+ 
 
     // Reveal on scroll
     const reveals = document.querySelectorAll('.reveal');
